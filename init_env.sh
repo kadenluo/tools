@@ -1,23 +1,11 @@
 #!/bin/sh
 # 配置
-sys_user="kaden"
 git_user="kadenluo"
 mariadb_user="test"
 mariadb_passwd="123456"
 
 function init_system()
 {
-    grep -q "$sys_user" /etc/passwd
-    if [ $? -ne 0 ];then
-        useradd $sys_user
-        passwd $sys_user
-    fi
-
-    grep -q "${sys_user}[ \t]*ALL=" /etc/sudoers
-    if [ $? -ne 0 ];then
-        sed '/^root[ \t]*ALL=.*ALL$/a${sys_user}   ALL=(ALL)    NOPASSWD: ALL' -i /etc/sudoers
-    fi
-
     sudo yum -y install lrzsz
     sudo yum -y install gcc
     sudo yum -y install gcc-c++
@@ -26,17 +14,25 @@ function init_system()
 
 function init_vim()
 {
-    config_path="/etc/.vimrc"
-    cp -f "${config_path}" "${config_path}.bak"
+    config_path=~/.vimrc
+    if [ -f ${config_path} ];then
+        cp -f "${config_path}" "${config_path}.bak"
+    fi
+
     cp -f .vimrc ${config_path}
 
-    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-    echo "set rtp+=~/.vim/bundle/Vundle.vim" >> ${config_path}
-    echo "call vundle#begin()" >> ${config_path}
-    echo "Plugin 'gmarik/Vundle.vim" >> ${config_path}
-    echo "Plugin 'wxnacy/vim-mysql'" >> ${config_path}
-    echo "Plugin 'pangloss/vim-javascript'" >> ${config_path}
-    echo "call vundle#end()" >> ${config_path}
+    if [ ! -d ~/.vim/bundle/Vundle.vim ];then
+	    git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+    fi
+
+    if [ -f "${config_path}" ];then
+        echo "set rtp+=~/.vim/bundle/Vundle.vim" >> ${config_path}
+        echo "call vundle#begin()" >> ${config_path}
+        echo "Plugin 'gmarik/Vundle.vim'" >> ${config_path}
+        echo "Plugin 'wxnacy/vim-mysql'" >> ${config_path}
+        echo "Plugin 'pangloss/vim-javascript'" >> ${config_path}
+        echo "call vundle#end()" >> ${config_path}
+    fi
 }
 
 function init_git()
