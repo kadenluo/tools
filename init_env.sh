@@ -42,11 +42,11 @@ function init_vim()
 function init_git()
 {
     which git
-    if [ $? -eq 0 ];then
+    if [ $? -ne 0 ];then
         return
+        sudo yum -y install git
     fi
 
-    sudo yum -y install git
     git config --global user.name "${git_user}"
     git config --global color.diff auto
     git config --global color.interactive auto
