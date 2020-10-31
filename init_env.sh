@@ -71,8 +71,5 @@ function init_mariadb()
     fi
 }
 
-init_system
-init_git
 init_vim
-init_mariadb
 

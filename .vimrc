@@ -1,3 +1,5 @@
+let $VIMRUNTIME="/usr/share/vim/vim82"
+set runtimepath=/usr/share/vim/vim82
 filetype on
 filetype plugin on
 filetype indent on
@@ -116,3 +118,26 @@ map <F12> <ESC>:lvim /<c-r>=expand("<cword>")<cr>/ *.*<cr>:lw<cr>
 augroup filetype
     autocmd! BufRead,BufNewFile BUILD set filetype=blade
 augroup end
+
+"需要先下载Vundle: git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+Plugin 'wxnacy/vim-mysql'
+Plugin 'pangloss/vim-javascript'
+"可以快速对齐的插件
+Plugin 'junegunn/vim-easy-align 
+" 用来提供一个导航目录的侧边栏
+Plugin 'preservim/nerdtree'
+" 查看当前代码文件中的变量和函数列表的插件
+" 可以切换和跳转到代码中对应的变量和函数的位置
+" 大纲式导航, Go 需要 https://github.com/jstemmer/gotags 支持
+Plugin 'majutsushi/tagbar'
+" 自动补全括号的插件，包括小括号，中括号，以及花括号
+Plugin 'jiangmiao/auto-pairs'
+" go 主要插件
+Plugin 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" 代码自动完成，安装完插件还需要额外配置才可以使用
+" cd ~/.vim/plugged/YouCompleteMe && ./install.py --go-completer
+Plugin 'ycm-core/YouCompleteMe'
+call vundle#end()
